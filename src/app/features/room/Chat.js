@@ -98,7 +98,7 @@ const Chat = ({ socket, userData, handleLogout }) => {
         });
 
         socket.on("join-alert", (data) => {
-            setAlertSuffix("joined");
+            setAlertSuffix("online");
             handleUserJoin(data.username);
         });
 
@@ -109,7 +109,7 @@ const Chat = ({ socket, userData, handleLogout }) => {
 
         socket.on("left-alert", (data) => {
             handleUserJoin(data.username);
-            setAlertSuffix("left");
+            setAlertSuffix("offline");
         });
 
         return () => {
