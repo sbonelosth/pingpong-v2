@@ -134,7 +134,7 @@ const Public = ({ socket, userData }) => {
             </div>
             <div
                 className="attachment-preview"
-                onClick={handleImageChange}
+                onClick={handleImageUndo}
                 style={{
                     width: "100%",
                 }}>
