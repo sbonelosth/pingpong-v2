@@ -34,7 +34,6 @@ function App() {
     });
 
     if (response.status === 403) {
-      // access token expired? try refreshing it
       const refreshToken = localStorage.getItem('refreshToken');
       const refreshResponse = await fetch(url, {
         method: 'POST',
@@ -46,11 +45,9 @@ function App() {
         const refreshData = await refreshResponse.json();
         setAccessToken(refreshData.accessToken);
 
-        // setRoomData({ roomName: refreshData.room, roomKey: "", username: refreshData.username });
         localStorage.setItem('accessToken', refreshData.accessToken);
         token = refreshData.accessToken;
 
-        // retrying the original request with the new token
         return fetch(url, {
           ...options,
           headers: {
@@ -85,7 +82,6 @@ function App() {
     if (response.ok) {
       const data = await response.json();
       setAccessToken(data.accessToken);
-      // console.log("Data from refresh:", data);
       localStorage.setItem('accessToken', data.accessToken);
       setJoinSuccess(true);
     } else {

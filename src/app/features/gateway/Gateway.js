@@ -38,10 +38,8 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
         const hasNullValues = Object.values(roomData).some(value => value === null || value === '');
 
         if (hasNullValues) {
-            // console.log('Missing some data. All data fields are required.');
             return;
         } else {
-            // console.log('All the required data provided.');
             try {
                 const res = await fetch('https://pingpong-v2-server.onrender.com/join', {
                     method: 'POST',
@@ -55,7 +53,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
                     localStorage.setItem("roomData", JSON.stringify(roomData));
                     localStorage.setItem("refreshToken", data.refreshToken);
                     localStorage.setItem("accessToken", data.accessToken);
-                    console.log("Joined successfully: ", data);
+
                 } else {
                     console.log("Error: ", data.error);
                 }
@@ -89,7 +87,12 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
                 onChange={handleChange}
                 required
                 placeholder="username" />
-            <button id="proceed-btn" ref={loginBtnRef} onClick={handleJoinRoom}>{`${isJoin ? "Join" : "Create"} Room`}</button>
+            <button
+                id="proceed-btn"
+                ref={loginBtnRef}
+                onClick={handleJoinRoom}>
+                {`${isJoin ? "Join" : "Create"} Room`}
+            </button>
         </section>
     );
 };
