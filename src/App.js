@@ -1,24 +1,134 @@
-import logo from './logo.svg';
 import './App.css';
+import "@fontsource/jetbrains-mono";
+import Chat from './app/features/room/Chat';
+import { useRef, useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import Public from './app/features/room/Public';
+import useScrollSnap from 'react-use-scroll-snap';
+import Gateway from './app/features/gateway/Gateway';
+
+const socket = io.connect("http://localhost:3001");
 
 function App() {
+  const [roomData, setRoomData] = useState({
+    roomName: "",
+    roomKey: "",
+    username: "",
+  });
+
+  const storedRoomData = JSON.parse(localStorage.getItem('roomData'));
+
+  const [joinSuccess, setJoinSuccess] = useState(false);
+
+  const [accessToken, setAccessToken] = useState(null);
+
+  const fetchWithToken = async (url, options = {}) => {
+    let token = accessToken;
+
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (response.status === 403) {
+      // access token expired? try refreshing it
+      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshResponse = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: refreshToken })
+      });
+
+      if (refreshResponse.ok) {
+        const refreshData = await refreshResponse.json();
+        setAccessToken(refreshData.accessToken);
+
+        // setRoomData({ roomName: refreshData.room, roomKey: "", username: refreshData.username });
+        localStorage.setItem('accessToken', refreshData.accessToken);
+        token = refreshData.accessToken;
+
+        // retrying the original request with the new token
+        return fetch(url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+      } else {
+        handleLogout();
+      }
+    }
+
+    return response;
+  };
+
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setAccessToken(null);
+    window.location.href = '/login';
+  };
+
+  const verifyToken = async (token) => {
+    const response = await fetchWithToken('http://localhost:3001/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      setAccessToken(data.accessToken);
+      console.log("Data from refresh:", data);
+      localStorage.setItem('accessToken', data.accessToken);
+      setJoinSuccess(true);
+    } else {
+      console.log("Token verification failed");
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('refreshToken');
+    if (token) {
+      verifyToken(token);
+      setRoomData({
+        roomName: storedRoomData.roomName,
+        roomKey: storedRoomData.roomKey,
+        username: storedRoomData.username,
+      });
+      console.log("Stored refresh token:", token, "\nroomData after refresh:", roomData);
+      socket.emit("join-room", storedRoomData);
+    }
+  }, []);
+
+
+  const scrollRef = useRef(null);
+  useScrollSnap({ ref: scrollRef, duration: 10, delay: 0 });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section className="App">
+      {
+        !joinSuccess ? (
+          <Gateway
+            roomData={roomData}
+            setRoomData={setRoomData}
+            setJoinSuccess={setJoinSuccess}
+            socket={socket}
+          />
+        ) : (
+          <main className='main-activity' ref={scrollRef}>
+            <Chat socket={socket} userData={storedRoomData} handleLogout={handleLogout} />
+            <Public socket={socket} userData={storedRoomData} />
+          </main>
+        )
+      }
+    </section>
   );
 }
 
