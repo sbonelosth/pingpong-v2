@@ -86,14 +86,14 @@ const Chat = ({ socket, userData, handleLogout }) => {
     useEffect(() => {
         socket.on("receive-message", (messageContent) => {
             setIsTyping(false);
-            console.log("data: ", messageContent);
+            // console.log("data: ", messageContent);
             setMessageList((list) => [...list, messageContent]);
         });
 
         socket.on("join-alert", (data) => {
             setAlertSuffix("joined");
             handleUserJoin(data.username);
-            console.log("joining: ", data.username);
+            // console.log("joining: ", data.username);
         });
 
         socket.on("user-typing", (msg) => {
@@ -104,7 +104,7 @@ const Chat = ({ socket, userData, handleLogout }) => {
         socket.on("left-alert", (data) => {
             handleUserJoin(data.username);
             setAlertSuffix("left");
-            console.log("leaving: ", data.username);
+            // console.log("leaving: ", data.username);
         });
 
         return () => {

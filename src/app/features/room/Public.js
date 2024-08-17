@@ -66,16 +66,16 @@ const Public = ({ socket, userData }) => {
 
     useEffect(() => {
         socket.on("receive-post", (postContent) => {
-            console.log("data: ", postContent);
+            // console.log("data: ", postContent);
             setPostList((list) => [...list, postContent]);
         });
 
         socket.on("join-alert", (alert) => {
-            console.log("data: ", alert);
+            // console.log("data: ", alert);
         });
 
         socket.on("left-alert", (alert) => {
-            console.log("data: ", alert);
+            // console.log("data: ", alert);
         });
 
         return () => {

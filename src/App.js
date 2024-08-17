@@ -7,7 +7,7 @@ import Public from './app/features/room/Public';
 import useScrollSnap from 'react-use-scroll-snap';
 import Gateway from './app/features/gateway/Gateway';
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://pingpong-v2-server.onrender.com");
 
 function App() {
   const [roomData, setRoomData] = useState({
@@ -85,7 +85,7 @@ function App() {
     if (response.ok) {
       const data = await response.json();
       setAccessToken(data.accessToken);
-      console.log("Data from refresh:", data);
+      // console.log("Data from refresh:", data);
       localStorage.setItem('accessToken', data.accessToken);
       setJoinSuccess(true);
     } else {
