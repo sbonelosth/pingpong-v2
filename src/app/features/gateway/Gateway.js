@@ -9,7 +9,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
 
         if (e.target.name === "roomName") {
             try {
-                const response = await fetch('https://pingpong-v2-server.onrender.com/validate', {
+                const response = await fetch('https://pingpong-v2-server.onrender.com/found', {
                     method: 'POST',
                     body: JSON.stringify({ roomName: e.target.value }),
                     headers: {
@@ -41,7 +41,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
             return;
         } else {
             try {
-                const res = await fetch('https://pingpong-v2-server.onrender.com/join', {
+                const res = await fetch('https://pingpong-v2-server.onrender.com/room', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(roomData)

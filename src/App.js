@@ -69,11 +69,11 @@ function App() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     setAccessToken(null);
-    window.location.href = '/login';
+    window.location.href = '/';
   };
 
   const verifyToken = async (token) => {
-    const response = await fetchWithToken('http://localhost:3001/token', {
+    const response = await fetchWithToken('https://pingpong-v2-server.onrender.com/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token })
