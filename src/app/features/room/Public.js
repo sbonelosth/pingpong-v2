@@ -174,6 +174,7 @@ const Public = ({ socket, userData }) => {
                     })
                 }
             </div>
+            <p className='public-room-label'>public room</p>
         </div>
     )
 }
