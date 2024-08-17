@@ -72,14 +72,14 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
                 name="roomName"
                 onChange={handleChange}
                 required
-                placeholder="room name" />
+                placeholder="room name (i.e. freeroom)" />
             <input
                 type="text"
                 name="roomKey"
                 value={roomData.roomKey}
                 onChange={handleChange}
                 required
-                placeholder="room key" />
+                placeholder="room key (i.e. 1234)" />
             <input
                 type="text"
                 name="username"
