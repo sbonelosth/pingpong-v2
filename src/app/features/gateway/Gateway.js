@@ -72,14 +72,14 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
                 name="roomName"
                 onChange={handleChange}
                 required
-                placeholder="room name (i.e. freeroom)" />
+                placeholder="room name" />
             <input
                 type="text"
                 name="roomKey"
                 value={roomData.roomKey}
                 onChange={handleChange}
                 required
-                placeholder="room key (i.e. 1234)" />
+                placeholder="room key" />
             <input
                 type="text"
                 name="username"
@@ -93,6 +93,11 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
                 onClick={handleJoinRoom}>
                 {`${isJoin ? "Join" : "Create"} Room`}
             </button>
+            <p className="existing-room">
+                To access an existing room:<br /><br />
+                room name: freeroom<br />
+                room key: 1234
+            </p>
         </section>
     );
 };

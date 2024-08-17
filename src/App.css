@@ -82,6 +82,11 @@
   box-shadow: 0 0 1px 0 #55a7e5;
 }
 
+.existing-room {
+  font-size: small;
+  color: #f0f8ffcc;
+}
+
 .action-bar {
   width: 100%;
   justify-content: space-between;
