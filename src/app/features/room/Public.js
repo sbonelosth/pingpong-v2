@@ -94,11 +94,11 @@ const Public = ({ socket, userData }) => {
     return (
 
         <div className='public-container'>
-            <nav
+            {/* <nav
                 className='dir'
                 onClick={scrollToTop}>
                 <FontAwesomeIcon icon={faHouseLock} size='2x' />
-            </nav>
+            </nav> */}
             <div className='create-post-container'>
                 <label className="attach-file">
                     <input

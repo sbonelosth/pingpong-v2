@@ -308,11 +308,8 @@ input[type="file"] {
 }
 
 .dir {
-  position: absolute;
-  bottom: calc(-96vh);
   width: 3rem;
   height: 3rem;
-  right: 2rem;
   display: none;
   color: #f0f8ffcc;
   background-color: #55a7e566;
@@ -413,23 +410,13 @@ input[type="file"] {
     scroll-snap-align: start;
   }
 
-  .input-content {
-    padding-bottom: 2rem;
-  }
-
   .public-container {
     flex-direction: column-reverse;
-  }
-
-  .create-post-container {
-    padding-bottom: 2rem;
   }
 
   .dir {
     display: flex;
     align-items: center;
-    bottom: -85vh;
-    right: 1rem;
   }
 
   #input-text,
