@@ -60,6 +60,14 @@ const Public = ({ socket, userData }) => {
         }
     }
 
+    const handleImageUndo = () => {
+        setImageObject({
+            file: null,
+            blob: "",
+            type: ""
+        });
+    };
+
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -126,6 +134,7 @@ const Public = ({ socket, userData }) => {
             </div>
             <div
                 className="attachment-preview"
+                onClick={handleImageChange}
                 style={{
                     width: "100%",
                 }}>

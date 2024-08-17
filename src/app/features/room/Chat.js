@@ -40,9 +40,17 @@ const Chat = ({ socket, userData, handleLogout }) => {
         handleImageChange(file, setImageObject);
     }
 
+    const handleImageUndo = () => {
+        setImageObject({
+            file: null,
+            blob: "",
+            type: ""
+        });
+    };
+
     const handleTyping = async () => {
         await socket.emit("user-typing", userData);
-    }
+    };
 
     const sendMsg = async (e) => {
         e.preventDefault();
@@ -70,7 +78,7 @@ const Chat = ({ socket, userData, handleLogout }) => {
                 type: ""
             });
         }
-    }
+    };
 
     const handleUserJoin = (user) => {
         clearTimeout(timer);
@@ -93,7 +101,7 @@ const Chat = ({ socket, userData, handleLogout }) => {
             setAlertSuffix("joined");
             handleUserJoin(data.username);
         });
-        
+
         socket.on("user-typing", (msg) => {
             setIsTyping(true);
             setTypingMsg(msg);
@@ -190,6 +198,7 @@ const Chat = ({ socket, userData, handleLogout }) => {
                     width: "100%"
                 }}>
                 <div
+                    onClick={handleImageUndo}
                     className="attachment-preview"
                     style={{
                         width: "100px",
