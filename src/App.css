@@ -91,7 +91,7 @@
 .gateway-container>button:hover
 {
     background-color: #1a223a;
-    color: aliceblue;
+    color: #f0f8ffcc;
     box-shadow: 0 0 1px 0 var(--primary-accent);
 }
 
@@ -327,7 +327,7 @@ input[type="file"]
     border: 0;
     border-radius: 20px;
     background: #1a223a;
-    color: aliceblue;
+    color: #f0f8ffcc;
 }
 
 .btn,
@@ -398,8 +398,8 @@ input[type="file"]
 {
     width: 85%;
     padding: 0.5rem 1rem;
-    background-color: #131329;
-    color: aliceblue;
+    background-color: var(--bg-color);
+    color: #f0f8ffcc;
     border-radius: 20px;
     outline: 0;
     border: 0;
