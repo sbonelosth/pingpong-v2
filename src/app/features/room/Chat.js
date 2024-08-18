@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faPaperPlane, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { handleImageChange } from '../../utils/imageUtils';
 
-const Chat = ({ socket, userData, handleLogout }) => {
+const Chat = ({ socket, userData, handleLogout }) =>
+{
     const [currentMsg, setCurrentMsg] = useState("");
     const [messageList, setMessageList] = useState([]);
     const [userList, setUserList] = useState([]);
@@ -22,25 +23,30 @@ const Chat = ({ socket, userData, handleLogout }) => {
     let previousSender = null;
     const chatContainerRef = useRef(null);
 
-    const handleImageClick = (imageSrc) => {
+    const handleImageClick = (imageSrc) =>
+    {
         setProjectedImage(imageSrc);
     };
 
-    const closeProjectedImage = () => {
+    const closeProjectedImage = () =>
+    {
         setProjectedImage(null);
     };
 
 
-    const handleCurrentMsg = (e) => {
+    const handleCurrentMsg = (e) =>
+    {
         setCurrentMsg(e.target.value);
     };
 
-    const onImageChange = (e) => {
+    const onImageChange = (e) =>
+    {
         const file = e.target.files[0];
         handleImageChange(file, setImageObject);
     }
 
-    const handleImageUndo = () => {
+    const handleImageUndo = () =>
+    {
         setImageObject({
             file: null,
             blob: "",
@@ -48,14 +54,17 @@ const Chat = ({ socket, userData, handleLogout }) => {
         });
     };
 
-    const handleTyping = async () => {
+    const handleTyping = async () =>
+    {
         await socket.emit("user-typing", userData);
     };
 
-    const sendMsg = async (e) => {
+    const sendMsg = async (e) =>
+    {
         e.preventDefault();
 
-        if (currentMsg !== "") {
+        if (currentMsg !== "")
+        {
             setMessageCount(prevCount => prevCount + 1);
 
             const messageContent = {
@@ -80,39 +89,47 @@ const Chat = ({ socket, userData, handleLogout }) => {
         }
     };
 
-    const handleUserJoin = (user) => {
+    const handleUserJoin = (user) =>
+    {
         clearTimeout(timer);
         setUserList((prevUsers) => [...prevUsers, user]);
 
-        const newTimer = setTimeout(() => {
+        const newTimer = setTimeout(() =>
+        {
             setUserList([]);
         }, 3000);
 
         setTimer(newTimer);
     };
 
-    useEffect(() => {
-        socket.on("receive-message", (messageContent) => {
+    useEffect(() =>
+    {
+        socket.on("receive-message", (messageContent) =>
+        {
             setIsTyping(false);
             setMessageList((list) => [...list, messageContent]);
         });
 
-        socket.on("join-alert", (data) => {
+        socket.on("join-alert", (data) =>
+        {
             setAlertSuffix("online");
             handleUserJoin(data.username);
         });
 
-        socket.on("user-typing", (msg) => {
+        socket.on("user-typing", (msg) =>
+        {
             setIsTyping(true);
             setTypingMsg(msg);
         });
 
-        socket.on("left-alert", (data) => {
+        socket.on("left-alert", (data) =>
+        {
             handleUserJoin(data.username);
             setAlertSuffix("offline");
         });
 
-        return () => {
+        return () =>
+        {
             socket.off("receive-message");
             socket.off("join-alert");
             socket.off("user-typing");
@@ -121,9 +138,12 @@ const Chat = ({ socket, userData, handleLogout }) => {
 
     }, [socket]);
 
-    useEffect(() => {
-        if (isTyping) {
-            const typingTimeout = setTimeout(() => {
+    useEffect(() =>
+    {
+        if (isTyping)
+        {
+            const typingTimeout = setTimeout(() =>
+            {
                 setIsTyping(false);
             }, 1000);
 
@@ -131,13 +151,16 @@ const Chat = ({ socket, userData, handleLogout }) => {
         }
     }, [isTyping]);
 
-    useEffect(() => {
-        if (chatContainerRef.current) {
+    useEffect(() =>
+    {
+        if (chatContainerRef.current)
+        {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     }, [messageList]);
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         return () => clearTimeout(timer);
     }, [timer]);
 
@@ -160,7 +183,8 @@ const Chat = ({ socket, userData, handleLogout }) => {
             </div>
             <div className="chat-container" ref={chatContainerRef}>
                 {
-                    messageList.map((messageContent, index) => {
+                    messageList.map((messageContent, index) =>
+                    {
                         const showUserMeta = previousSender !== messageContent.sender;
                         previousSender = messageContent.sender;
 
@@ -238,7 +262,7 @@ const Chat = ({ socket, userData, handleLogout }) => {
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default Chat
+export default Chat;

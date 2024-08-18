@@ -1,14 +1,18 @@
 import { useRef, useState } from "react";
 
-const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
+const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
+{
     const [isJoin, setIsJoin] = useState(true);
     const loginBtnRef = useRef(null);
 
-    const handleChange = async (e) => {
+    const handleChange = async (e) =>
+    {
         setRoomData({ ...roomData, [e.target.name]: e.target.value });
 
-        if (e.target.name === "roomName") {
-            try {
+        if (e.target.name === "roomName")
+        {
+            try
+            {
                 const response = await fetch('https://pingpong-v2-server.onrender.com/found', {
                     method: 'POST',
                     body: JSON.stringify({ roomName: e.target.value }),
@@ -18,46 +22,56 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) => {
                 });
 
                 const data = await response.json();
-                if (response.ok) {
+                if (response.ok)
+                {
                     setIsJoin(data.exists);
                 }
-                else {
+                else
+                {
                     console.log(data.error);
                 }
 
             }
-            catch (error) {
+            catch (error)
+            {
                 console.log("Error:", error);
             }
         }
     };
 
-    const handleJoinRoom = async (e) => {
+    const handleJoinRoom = async (e) =>
+    {
         e.preventDefault();
 
         const hasNullValues = Object.values(roomData).some(value => value === null || value === '');
 
-        if (hasNullValues) {
+        if (hasNullValues)
+        {
             return;
-        } else {
-            try {
+        } else
+        {
+            try
+            {
                 const res = await fetch('https://pingpong-v2-server.onrender.com/room', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(roomData)
                 });
                 const data = await res.json();
-                if (res.ok) {
+                if (res.ok)
+                {
                     socket.emit("join-room", roomData);
                     setJoinSuccess(true);
                     localStorage.setItem("roomData", JSON.stringify(roomData));
                     localStorage.setItem("refreshToken", data.refreshToken);
                     localStorage.setItem("accessToken", data.accessToken);
 
-                } else {
+                } else
+                {
                     console.log("Error: ", data.error);
                 }
-            } catch (err) {
+            } catch (err)
+            {
                 console.log("Error: ", err);
             }
         }

@@ -1,10 +1,11 @@
-import { faHouseLock, faImage, faLock, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faHouseLock, faImage, faBullhorn, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { handleImageChange } from '../../utils/imageUtils';
 
-const Public = ({ socket, userData }) => {
+const Public = ({ socket, userData }) =>
+{
     const [currentPost, setCurrentPost] = useState("");
     const [postList, setPostList] = useState([]);
     const [imageObject, setImageObject] = useState({
@@ -14,31 +15,38 @@ const Public = ({ socket, userData }) => {
     });
 
     const [projectedImage, setProjectedImage] = useState(null);
+    const [showPublicChat, setShowPublicChat] = useState(true);
 
     let previousSender = null;
-    const publicContainerRef = useRef(null);
+    const postsContainerRef = useRef(null);
 
-    const handleImageClick = (imageSrc) => {
+    const handleImageClick = (imageSrc) =>
+    {
         setProjectedImage(imageSrc);
     };
 
-    const closeProjectedImage = () => {
+    const closeProjectedImage = () =>
+    {
         setProjectedImage(null);
     };
 
-    const handleCurrentPost = (e) => {
+    const handleCurrentPost = (e) =>
+    {
         setCurrentPost(e.target.value);
     };
 
-    const onImageChange = (e) => {
+    const onImageChange = (e) =>
+    {
         const file = e.target.files[0];
         handleImageChange(file, setImageObject);
-    }
+    };
 
-    const sendPost = async (e) => {
+    const sendPost = async (e) =>
+    {
         e.preventDefault();
 
-        if (currentPost !== "") {
+        if (currentPost !== "")
+        {
             const postContent = {
                 room: "public",
                 sender: userData.username,
@@ -58,9 +66,10 @@ const Public = ({ socket, userData }) => {
                 type: ""
             });
         }
-    }
+    };
 
-    const handleImageUndo = () => {
+    const handleImageUndo = () =>
+    {
         setImageObject({
             file: null,
             blob: "",
@@ -68,24 +77,30 @@ const Public = ({ socket, userData }) => {
         });
     };
 
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    const togglePublicChat = () =>
+    {
+        setShowPublicChat(prevState => !prevState);
+    };
 
-    useEffect(() => {
-        socket.on("receive-post", (postContent) => {
+    useEffect(() =>
+    {
+        socket.on("receive-post", (postContent) =>
+        {
             setPostList((list) => [...list, postContent]);
         });
 
-        socket.on("join-alert", (data) => {
+        socket.on("join-alert", (data) =>
+        {
             console.log("data: ", data.username);
         });
 
-        socket.on("left-alert", (data) => {
+        socket.on("left-alert", (data) =>
+        {
             console.log("data: ", data.username);
         });
 
-        return () => {
+        return () =>
+        {
             socket.off("receive-post");
             socket.off("join-alert");
             socket.off("left-alert");
@@ -93,20 +108,21 @@ const Public = ({ socket, userData }) => {
 
     }, [socket]);
 
-    useEffect(() => {
-        if (publicContainerRef.current) {
-            publicContainerRef.current.scrollTop = -publicContainerRef.current.scrollHeight;
+    useEffect(() =>
+    {
+        if (postsContainerRef.current)
+        {
+            postsContainerRef.current.scrollTop = -postsContainerRef.current.scrollHeight;
         }
     }, [postList]);
 
     return (
-
-        <div className='public-container'>
-            {/* <nav
+        <div className='public-container' style={{ height: showPublicChat ? "100vh" : "0" }}>
+            <nav
                 className='dir'
-                onClick={scrollToTop}>
-                <FontAwesomeIcon icon={faHouseLock} size='2x' />
-            </nav> */}
+                onClick={togglePublicChat}>
+                <FontAwesomeIcon icon={showPublicChat ? faHouseLock : faBullhorn} size='2x' />
+            </nav>
             <div className='create-post-container'>
                 <label className="attach-file">
                     <input
@@ -144,9 +160,10 @@ const Public = ({ socket, userData }) => {
                         src={`data:image/${imageObject.type};base64,${imageObject.blob}`} alt='Preview' />
                 }
             </div>
-            <div className='public-posts-container' ref={publicContainerRef}>
+            <div className='public-posts-container' ref={postsContainerRef}>
                 {
-                    postList.map((postContent, index) => {
+                    postList.map((postContent, index) =>
+                    {
                         const showUserMeta = previousSender !== postContent.sender;
                         previousSender = postContent.sender;
 
@@ -185,7 +202,7 @@ const Public = ({ socket, userData }) => {
             </div>
             <p className='public-room-label'>public room</p>
         </div>
-    )
-}
+    );
+};
 
-export default Public
+export default Public;
