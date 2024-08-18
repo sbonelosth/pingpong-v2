@@ -265,7 +265,7 @@
 {
     font-size: x-small;
     color: #1a223a;
-    padding: 0.11rem 0.5rem;
+    padding: 0.125rem 0.5rem;
     background-color: #f0f8ff88;
     border-radius: 0 10px 10px 0;
 }
@@ -520,7 +520,7 @@ input[type="file"]
 
     .create-post-container
     {
-        padding-bottom: 2rem;
+        padding-bottom: 1rem;
     }
 
     .post-content>.text-post
