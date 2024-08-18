@@ -27,6 +27,7 @@
 .post-container,
 .post-content,
 .message-container,
+.message-content,
 .user-meta,
 .projected-image-container,
 .public-posts-container,
@@ -49,6 +50,7 @@
 
 .gateway-container,
 .room-container,
+.message-content,
 .public-container
 {
     flex-direction: column;
@@ -201,6 +203,16 @@
     padding-left: 10rem;
 }
 
+.other>.message-content
+{
+    align-items: start;
+}
+
+.sender>.message-content
+{
+    align-items: end;
+}
+
 .message-content>.text-message,
 .post-content>.text-post
 {
@@ -218,8 +230,9 @@
 .message-content>img,
 .post-content>img
 {
-    margin-top: 0.5rem;
+    margin: 0.5rem 0;
     cursor: pointer;
+    border-radius: 10px;
     transition: all .2s ease-in-out;
 }
 
@@ -284,14 +297,19 @@
     cursor: pointer;
 }
 
+.input-container
+{
+    width: 100%;
+}
+
 .input-content
 {
     width: 100%;
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    padding: 0.5rem 1rem;
-    margin: 0.5rem auto;
+    padding: 0 1rem;
+    margin: 0 auto;
     border-radius: 20px;
 }
 
@@ -309,6 +327,27 @@ input[type="file"]
     font-size: xx-large;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+}
+
+.attachment-preview
+{
+    width: 100%;
+    border-radius: 10px;
+}
+
+.attachment-preview p
+{
+    color: #f0f8ffcc;
+    font-size: x-small;
+    font-style: italic;
+    margin: 0.5rem 0 0 1rem;
+}
+
+.attachment-preview img
+{
+    width: 100px;
+    border-radius: 10px;
+    margin: 0.5rem 0.5rem 0 1rem;
 }
 
 #input-text
@@ -366,7 +405,7 @@ input[type="file"]
     width: 2.5rem;
     height: 2.5rem;
     right: 1rem;
-    bottom: 5.5rem;
+    bottom: 5rem;
     display: none;
     color: #f0f8ffcc;
     background-color: #55a7e533;
@@ -383,7 +422,7 @@ input[type="file"]
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
     margin: 0 auto;
     border-radius: 20px;
 }
@@ -531,5 +570,13 @@ input[type="file"]
     .create-post-container>input
     {
         width: 70%;
+    }
+
+
+    .public-container .attachment-preview img
+    {
+        width: 100px;
+        border-radius: 10px;
+        margin: 0.5rem 0.5rem 0 1rem;
     }
 }

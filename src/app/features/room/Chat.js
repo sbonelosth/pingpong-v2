@@ -63,7 +63,7 @@ const Chat = ({ socket, userData, handleLogout }) =>
     {
         e.preventDefault();
 
-        if (currentMsg !== "")
+        if (currentMsg !== "" || imageObject.file !== null)
         {
             setMessageCount(prevCount => prevCount + 1);
 
@@ -223,16 +223,16 @@ const Chat = ({ socket, userData, handleLogout }) =>
                 }}>
                 <div
                     onClick={handleImageUndo}
-                    className="attachment-preview"
-                    style={{
-                        width: "100px",
-                        borderRadius: "10px",
-                    }}>
+                    className="attachment-preview">
                     {
-                        (imageObject.file !== null) &&
-                        <img style={{ width: "100px", borderRadius: "10px", margin: "1rem" }}
-                            src={`data:image/${imageObject.type};base64,${imageObject.blob}`} alt='Preview' />
-                    }
+                    (imageObject.file !== null) &&
+                    <>
+                        <p>File Preview</p>
+                        <img
+                            src={`data:image/${imageObject.type};base64,${imageObject.blob}`}
+                            alt='Preview' />
+                    </>
+                }
                 </div>
                 <div className="input-content">
                     <label className="attach-file">

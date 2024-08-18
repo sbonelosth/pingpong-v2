@@ -45,7 +45,7 @@ const Public = ({ socket, userData }) =>
     {
         e.preventDefault();
 
-        if (currentPost !== "")
+        if (currentPost !== "" || imageObject.file !== null)
         {
             const postContent = {
                 room: "public",
@@ -150,14 +150,15 @@ const Public = ({ socket, userData }) =>
             </div>
             <div
                 className="attachment-preview"
-                onClick={handleImageUndo}
-                style={{
-                    width: "100%",
-                }}>
+                onClick={handleImageUndo}>
                 {
                     (imageObject.file !== null) &&
-                    <img style={{ width: "100px", borderRadius: "10px", margin: "1rem" }}
-                        src={`data:image/${imageObject.type};base64,${imageObject.blob}`} alt='Preview' />
+                    <>
+                        <p>File Preview</p>
+                        <img
+                            src={`data:image/${imageObject.type};base64,${imageObject.blob}`}
+                            alt='Preview' />
+                    </>
                 }
             </div>
             <div className='public-posts-container' ref={postsContainerRef}>
