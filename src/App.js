@@ -7,7 +7,7 @@ import Public from './app/features/room/Public';
 import useScrollSnap from 'react-use-scroll-snap';
 import Gateway from './app/features/gateway/Gateway';
 
-const socket = io.connect("https://pingpong-v2-server.onrender.com");
+const socket = io.connect("https://pingpong-v2-server.vercel.app");
 
 const App = () =>
 {
@@ -80,7 +80,7 @@ const App = () =>
 
     const verifyToken = async (token) =>
     {
-        const response = await fetchWithToken('https://pingpong-v2-server.onrender.com/auth', {
+        const response = await fetchWithToken('https://pingpong-v2-server.vercel.app/auth', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ token })

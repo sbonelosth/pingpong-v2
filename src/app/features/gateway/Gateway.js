@@ -13,7 +13,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
         {
             try
             {
-                const response = await fetch('https://pingpong-v2-server.onrender.com/found', {
+                const response = await fetch('https://pingpong-v2-server.vercel.app/found', {
                     method: 'POST',
                     body: JSON.stringify({ roomName: e.target.value }),
                     headers: {
@@ -52,7 +52,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
         {
             try
             {
-                const res = await fetch('https://pingpong-v2-server.onrender.com/room', {
+                const res = await fetch('https://pingpong-v2-server.vercel.app/room', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(roomData)
