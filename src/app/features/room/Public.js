@@ -91,12 +91,12 @@ const Public = ({ socket, userData }) =>
 
         socket.on("join-alert", (data) =>
         {
-            console.log("data: ", data.username);
+            console.log("online user: ", data.username);
         });
 
         socket.on("left-alert", (data) =>
         {
-            console.log("data: ", data.username);
+            console.log("offline user: ", data.username);
         });
 
         return () =>

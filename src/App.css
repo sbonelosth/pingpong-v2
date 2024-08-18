@@ -177,7 +177,6 @@
 .message-container
 {
     width: 100%;
-    padding: 0 1rem;
     box-sizing: border-box;
 }
 
@@ -233,11 +232,6 @@
 .sender>.message-content>.user-meta
 {
     justify-content: flex-end;
-}
-
-.other>.message-content>.user-meta
-{
-    transform: translateX(-1rem);
 }
 
 .user-meta

@@ -109,7 +109,6 @@ const App = () =>
                 roomKey: storedRoomData.roomKey,
                 username: storedRoomData.username,
             });
-            console.log("Stored refresh token:", token, "\nroomData after refresh:", roomData);
             socket.emit("join-room", storedRoomData);
         }
     }, []);
