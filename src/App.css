@@ -12,7 +12,7 @@
 
 :root
 {
-    --bg-color: #13132966;
+    --bg-color: #030319;
     --primary-accent: #55a7e5;
     --secondary-accent: #d1c994cc;
 }
@@ -142,7 +142,7 @@
     margin: 0 auto;
     padding: 1rem;
     align-items: center;
-    background-color: var(--primary-accent);
+    background-color: #55a7e566;
     box-shadow: 0 0 1000px 0 #000000;
     border-radius: 20px;
 }
