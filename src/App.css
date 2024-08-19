@@ -103,6 +103,12 @@
     color: #f0f8ffcc;
 }
 
+
+.free-room
+{
+    color: var(--primary-accent);
+}
+
 .action-bar
 {
     width: 100%;
@@ -423,6 +429,7 @@ input[type="file"]
     align-items: center;
     box-sizing: border-box;
     padding: 0 1rem;
+    padding-top: 1rem;
     margin: 0 auto;
     border-radius: 20px;
 }
@@ -554,6 +561,7 @@ input[type="file"]
     .create-post-container
     {
         padding-bottom: 1rem;
+        padding-top: 0;
     }
 
     .post-content>.text-post

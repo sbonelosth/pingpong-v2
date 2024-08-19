@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 import Public from './app/features/room/Public';
 import useScrollSnap from 'react-use-scroll-snap';
 import Gateway from './app/features/gateway/Gateway';
+import ApiCaller from './app/tricks/ApiCaller';
 
 const socket = io.connect("https://pingpong-v2-server.onrender.com");
 
@@ -134,6 +135,7 @@ const App = () =>
                     </main>
                 )
             }
+            <ApiCaller />
         </section>
     );
 }

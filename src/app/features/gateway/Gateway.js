@@ -109,8 +109,8 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
             </button>
             <p className="existing-room">
                 To access an existing room:<br /><br />
-                room name: freeroom<br />
-                room key: 1234
+                room name: <span className="free-room">freeroom</span><br />
+                room key: <span className="free-room">1234</span>
             </p>
         </section>
     );
