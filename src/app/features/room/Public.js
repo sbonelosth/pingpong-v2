@@ -43,6 +43,22 @@ const Public = ({ socket, userData }) =>
         handleImageChange(file, setImageObject);
     };
 
+    const groupPostsByDate = (posts) =>
+    {
+        return posts.reduce((groups, post) =>
+        {
+            const date = moment(post.timestamp, 'LT').startOf('day').format('YYYY-MM-DD');
+            if (!groups[date])
+            {
+                groups[date] = [];
+            }
+            groups[date].push(post);
+            return groups;
+        }, {});
+    };
+
+    const groupedPosts = groupPostsByDate(postList);
+
     const sendPost = async (e) =>
     {
         e.preventDefault();
@@ -145,23 +161,25 @@ const Public = ({ socket, userData }) =>
                 <FontAwesomeIcon icon={showPublicChat ? faHouseLock : faBullhorn} size='2x' />
             </nav>
             <div className='create-post-container'>
-                <label className="attach-file">
+                <div className='post-input-group'>
+                    <label className="attach-file">
+                        <input
+                            type="file"
+                            id="image-upload"
+                            name="imageUpload"
+                            onChange={onImageChange}
+                            accept=".jpg, .jpeg, .png" />
+                        <FontAwesomeIcon icon={faImage} color='#1f8a82' />
+                    </label>
                     <input
-                        type="file"
-                        id="image-upload"
-                        name="imageUpload"
-                        onChange={onImageChange}
-                        accept=".jpg, .jpeg, .png" />
-                    <FontAwesomeIcon icon={faImage} color='#1f8a82' />
-                </label>
-                <input
-                    type='text'
-                    name='post-text'
-                    value={currentPost}
-                    onChange={handleCurrentPost}
-                    onKeyDown={e => { e.key === "Enter" && sendPost(e) }}
-                    maxLength={140}
-                    placeholder='Join the discussion' />
+                        type='text'
+                        name='post-text'
+                        value={currentPost}
+                        onChange={handleCurrentPost}
+                        onKeyDown={e => { e.key === "Enter" && sendPost(e) }}
+                        maxLength={140}
+                        placeholder='Join the discussion' />
+                </div>
                 <button
                     className='btn'
                     style={{ backgroundColor: "#55a7e5" }}
@@ -182,45 +200,57 @@ const Public = ({ socket, userData }) =>
                     </>
                 }
             </div>
-            <div className='public-posts-container' ref={postsContainerRef}>
-                {
-                    postList.map((postContent, index) =>
-                    {
-                        const showUserMeta = previousSender !== postContent.sender;
-                        previousSender = postContent.sender;
+            <div className='public-posts-container'>
+                {Object.keys(groupedPosts).map((date, index) => (
+                    <div className='grouped-by-date' ref={postsContainerRef} key={index}>
+                        {groupedPosts[date].map((postContent, index) =>
+                        {
+                            const showUserMeta = previousSender !== postContent.sender;
+                            previousSender = postContent.sender;
 
-                        return (
-                            <div className={`post-container ${userData.username === postContent.sender ? "sender" : "other"}`} key={index}>
-                                <div className='avi-container'>
-                                    <div className={`user-avi ${showUserMeta ? "" : "avi-hide"}`}>{showUserMeta ? postContent.sender[0].toUpperCase() : ""}</div>
+                            return (
+                                <div className={`post-container ${userData.username === postContent.sender ? "sender" : "other"}`} key={index}>
+                                    <div className='avi-container'>
+                                        <div className={`user-avi ${showUserMeta ? "" : "avi-hide"}`}>{showUserMeta ? postContent.sender[0].toUpperCase() : ""}</div>
+                                    </div>
+                                    <div className="post-content">
+                                        {showUserMeta && (
+                                            <div className='user-meta'>
+                                                <p className='sender-name'>{postContent.sender}</p>
+                                                <p className='timestamp'>{` at ${postContent.timestamp}`}</p>
+                                            </div>
+                                        )}
+                                        <p className={`text-post ${showUserMeta ? "margin" : "no-margin"}`}>{postContent.post}</p>
+                                        {postContent.blob && (
+                                            <img
+                                                src={`data:image/${postContent.mimeType};base64,${postContent.blob}`}
+                                                width="100"
+                                                alt="Uploaded"
+                                                onClick={() => handleImageClick(`data:image/${postContent.mimeType};base64,${postContent.blob}`)} />
+                                        )}
+                                        {projectedImage && (
+                                            <div className="projected-image-container" onClick={closeProjectedImage}>
+                                                <img src={projectedImage} alt="Projected" className="projected-image" />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="post-content">
-                                    {
-                                        showUserMeta &&
-                                        (<div className='user-meta'>
-                                            <p className='sender-name'>{postContent.sender}</p>
-                                            <p className='timestamp'>{` at ${postContent.timestamp}`}</p>
-                                        </div>
-                                        )
-                                    }
-                                    <p className={`text-post ${showUserMeta ? "margin" : "no-margin"}`}>{postContent.post}</p>
-                                    {postContent.blob && (
-                                        <img
-                                            src={`data:image/${postContent.mimeType};base64,${postContent.blob}`}
-                                            width="100"
-                                            alt="Uploaded"
-                                            onClick={() => handleImageClick(`data:image/${postContent.mimeType};base64,${postContent.blob}`)} />
-                                    )}
-                                    {projectedImage && (
-                                        <div className="projected-image-container" onClick={closeProjectedImage}>
-                                            <img src={projectedImage} alt="Projected" className="projected-image" />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    })
-                }
+                            );
+                        })}
+                        <div className='date-header'>
+                            <p>
+                                {moment(date).calendar(null, {
+                                    sameDay: '[Today]',
+                                    nextDay: '[Tomorrow]',
+                                    nextWeek: 'dddd',
+                                    lastDay: '[Yesterday]',
+                                    lastWeek: '[Last] dddd',
+                                    sameElse: 'MMMM Do YYYY'
+                                })}
+                            </p>
+                        </div>
+                    </div>
+                ))}
             </div>
             <p className='public-room-label'>public room</p>
         </div>
