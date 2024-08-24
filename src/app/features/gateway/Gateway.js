@@ -4,6 +4,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
 {
     const [isJoin, setIsJoin] = useState(true);
     const loginBtnRef = useRef(null);
+    const usernameRef = useRef(null);
 
     const handleChange = async (e) =>
     {
@@ -77,6 +78,16 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
         }
     };
 
+    const handleOpenRoom = () => {
+        setRoomData({
+            roomName: "freeroom",
+            roomKey: "1234",
+            username: "",
+        });
+
+        usernameRef.current.focus();
+    };
+
     return (
         <section className="gateway-container">
             <p style={{ fontWeight: "bold", color: "aliceblue" }}>Join the Chat</p>
@@ -99,6 +110,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
                 name="username"
                 value={roomData.username}
                 onChange={handleChange}
+                ref={usernameRef}
                 required
                 placeholder="username" />
             <button
@@ -109,8 +121,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
             </button>
             <p className="existing-room">
                 To access an existing room:<br /><br />
-                room name: <span className="free-room">freeroom</span><br />
-                room key: <span className="free-room">1234</span>
+                <button onClick={handleOpenRoom}>Click Me</button>
             </p>
         </section>
     );

@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { handleImageChange } from '../../utils/imageUtils';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { db } from './firebase';
 
 const Public = ({ socket, userData }) =>
 {
@@ -57,153 +59,172 @@ const Public = ({ socket, userData }) =>
             };
 
             await socket.emit("send-post", postContent);
-            setPostList((list) => [...list, postContent]);
-            setCurrentPost("");
+            try
+            {
+                await addDoc(collection(db, 'posts'), postContent);
+                setPostList((list) => [...list, postContent]);
+                setCurrentPost("");
 
+                setImageObject({
+                    file: null,
+                    blob: "",
+                    type: ""
+                });
+            } catch (e)
+            {
+                console.error("Error adding document: ", e);
+            }
+        };
+
+        const handleImageUndo = () =>
+        {
             setImageObject({
                 file: null,
                 blob: "",
                 type: ""
             });
-        }
-    };
-
-    const handleImageUndo = () =>
-    {
-        setImageObject({
-            file: null,
-            blob: "",
-            type: ""
-        });
-    };
-
-    const togglePublicChat = () =>
-    {
-        setShowPublicChat(prevState => !prevState);
-    };
-
-    useEffect(() =>
-    {
-        socket.on("receive-post", (postContent) =>
-        {
-            setPostList((list) => [...list, postContent]);
-        });
-
-        socket.on("join-alert", (data) =>
-        {
-            console.log("online user: ", data.username);
-        });
-
-        socket.on("left-alert", (data) =>
-        {
-            console.log("offline user: ", data.username);
-        });
-
-        return () =>
-        {
-            socket.off("receive-post");
-            socket.off("join-alert");
-            socket.off("left-alert");
         };
 
-    }, [socket]);
-
-    useEffect(() =>
-    {
-        if (postsContainerRef.current)
+        const togglePublicChat = () =>
         {
-            postsContainerRef.current.scrollTop = -postsContainerRef.current.scrollHeight;
-        }
-    }, [postList]);
+            setShowPublicChat(prevState => !prevState);
+        };
 
-    return (
-        <div className='public-container' style={{ height: showPublicChat ? "100vh" : "0" }}>
-            <nav
-                className='dir'
-                onClick={togglePublicChat}>
-                <FontAwesomeIcon icon={showPublicChat ? faHouseLock : faBullhorn} size='2x' />
-            </nav>
-            <div className='create-post-container'>
-                <label className="attach-file">
+        useEffect(() =>
+        {
+            socket.on("receive-post", (postContent) =>
+            {
+                setPostList((list) => [...list, postContent]);
+            });
+
+            socket.on("join-alert", (data) =>
+            {
+                console.log("online user: ", data.username);
+            });
+
+            socket.on("left-alert", (data) =>
+            {
+                console.log("offline user: ", data.username);
+            });
+
+            return () =>
+            {
+                socket.off("receive-post");
+                socket.off("join-alert");
+                socket.off("left-alert");
+            };
+
+        }, [socket]);
+
+        useEffect(() =>
+        {
+            if (postsContainerRef.current)
+            {
+                postsContainerRef.current.scrollTop = -postsContainerRef.current.scrollHeight;
+            }
+        }, [postList]);
+
+        useEffect(() =>
+        {
+            const fetchPosts = async () =>
+            {
+                const querySnapshot = await getDocs(collection(db, 'posts'));
+                const posts = querySnapshot.docs.map(doc => doc.data());
+                setPostList(posts);
+            };
+
+            fetchPosts();
+        }, []);
+
+        return (
+            <div className='public-container' style={{ height: showPublicChat ? "100vh" : "0" }}>
+                <nav
+                    className='dir'
+                    onClick={togglePublicChat}>
+                    <FontAwesomeIcon icon={showPublicChat ? faHouseLock : faBullhorn} size='2x' />
+                </nav>
+                <div className='create-post-container'>
+                    <label className="attach-file">
+                        <input
+                            type="file"
+                            id="image-upload"
+                            name="imageUpload"
+                            onChange={onImageChange}
+                            accept=".jpg, .jpeg, .png" />
+                        <FontAwesomeIcon icon={faImage} color='#1f8a82' />
+                    </label>
                     <input
-                        type="file"
-                        id="image-upload"
-                        name="imageUpload"
-                        onChange={onImageChange}
-                        accept=".jpg, .jpeg, .png" />
-                    <FontAwesomeIcon icon={faImage} color='#1f8a82' />
-                </label>
-                <input
-                    type='text'
-                    name='post-text'
-                    value={currentPost}
-                    onChange={handleCurrentPost}
-                    onKeyDown={e => { e.key === "Enter" && sendPost(e) }}
-                    maxLength={140}
-                    placeholder='Join the discussion' />
-                <button
-                    className='btn'
-                    style={{ backgroundColor: "#55a7e5" }}
-                    onClick={sendPost}>
-                    <FontAwesomeIcon icon={faPaperPlane} />
-                </button>
-            </div>
-            <div
-                className="attachment-preview"
-                onClick={handleImageUndo}>
-                {
-                    (imageObject.file !== null) &&
-                    <>
-                        <p>File Preview</p>
-                        <img
-                            src={`data:image/${imageObject.type};base64,${imageObject.blob}`}
-                            alt='Preview' />
-                    </>
-                }
-            </div>
-            <div className='public-posts-container' ref={postsContainerRef}>
-                {
-                    postList.map((postContent, index) =>
+                        type='text'
+                        name='post-text'
+                        value={currentPost}
+                        onChange={handleCurrentPost}
+                        onKeyDown={e => { e.key === "Enter" && sendPost(e) }}
+                        maxLength={140}
+                        placeholder='Join the discussion' />
+                    <button
+                        className='btn'
+                        style={{ backgroundColor: "#55a7e5" }}
+                        onClick={sendPost}>
+                        <FontAwesomeIcon icon={faPaperPlane} />
+                    </button>
+                </div>
+                <div
+                    className="attachment-preview"
+                    onClick={handleImageUndo}>
                     {
-                        const showUserMeta = previousSender !== postContent.sender;
-                        previousSender = postContent.sender;
+                        (imageObject.file !== null) &&
+                        <>
+                            <p>File Preview</p>
+                            <img
+                                src={`data:image/${imageObject.type};base64,${imageObject.blob}`}
+                                alt='Preview' />
+                        </>
+                    }
+                </div>
+                <div className='public-posts-container' ref={postsContainerRef}>
+                    {
+                        postList.map((postContent, index) =>
+                        {
+                            const showUserMeta = previousSender !== postContent.sender;
+                            previousSender = postContent.sender;
 
-                        return (
-                            <div className={`post-container ${userData.username === postContent.sender ? "sender" : "other"}`} key={index}>
-                                <div className='avi-container'>
-                                    <div className={`user-avi ${showUserMeta ? "" : "avi-hide"}`}>{showUserMeta ? postContent.sender[0].toUpperCase() : ""}</div>
+                            return (
+                                <div className={`post-container ${userData.username === postContent.sender ? "sender" : "other"}`} key={index}>
+                                    <div className='avi-container'>
+                                        <div className={`user-avi ${showUserMeta ? "" : "avi-hide"}`}>{showUserMeta ? postContent.sender[0].toUpperCase() : ""}</div>
+                                    </div>
+                                    <div className="post-content">
+                                        {
+                                            showUserMeta &&
+                                            (<div className='user-meta'>
+                                                <p className='sender-name'>{postContent.sender}</p>
+                                                <p className='timestamp'>{` at ${postContent.timestamp}`}</p>
+                                            </div>
+                                            )
+                                        }
+                                        <p className={`text-post ${showUserMeta ? "margin" : "no-margin"}`}>{postContent.post}</p>
+                                        {postContent.blob && (
+                                            <img
+                                                src={`data:image/${postContent.mimeType};base64,${postContent.blob}`}
+                                                width="100"
+                                                alt="Uploaded"
+                                                onClick={() => handleImageClick(`data:image/${postContent.mimeType};base64,${postContent.blob}`)} />
+                                        )}
+                                        {projectedImage && (
+                                            <div className="projected-image-container" onClick={closeProjectedImage}>
+                                                <img src={projectedImage} alt="Projected" className="projected-image" />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="post-content">
-                                    {
-                                        showUserMeta &&
-                                        (<div className='user-meta'>
-                                            <p className='sender-name'>{postContent.sender}</p>
-                                            <p className='timestamp'>{` at ${postContent.timestamp}`}</p>
-                                        </div>
-                                        )
-                                    }
-                                    <p className={`text-post ${showUserMeta ? "margin" : "no-margin"}`}>{postContent.post}</p>
-                                    {postContent.blob && (
-                                        <img
-                                            src={`data:image/${postContent.mimeType};base64,${postContent.blob}`}
-                                            width="100"
-                                            alt="Uploaded"
-                                            onClick={() => handleImageClick(`data:image/${postContent.mimeType};base64,${postContent.blob}`)} />
-                                    )}
-                                    {projectedImage && (
-                                        <div className="projected-image-container" onClick={closeProjectedImage}>
-                                            <img src={projectedImage} alt="Projected" className="projected-image" />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    })
-                }
+                            );
+                        })
+                    }
+                </div>
+                <p className='public-room-label'>public room</p>
             </div>
-            <p className='public-room-label'>public room</p>
-        </div>
-    );
-};
+        );
+    };
+}
 
 export default Public;
