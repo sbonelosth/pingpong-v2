@@ -120,7 +120,7 @@ const App = () =>
 
     const scrollRef = useRef(null);
     useScrollSnap({ ref: scrollRef, duration: 10, delay: 0 });
-    dotPulse.Register();
+    dotPulse.register();
 
     return (
         <section className="App">
