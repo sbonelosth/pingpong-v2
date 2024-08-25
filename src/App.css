@@ -98,6 +98,17 @@
     box-shadow: 0 0 1px 0 var(--primary-accent);
 }
 
+
+.loader
+{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .existing-room
 {
     font-size: small;

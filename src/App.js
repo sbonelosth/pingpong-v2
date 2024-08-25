@@ -7,6 +7,7 @@ import Public from './app/features/room/Public';
 import useScrollSnap from 'react-use-scroll-snap';
 import Gateway from './app/features/gateway/Gateway';
 import ApiCaller from './app/tricks/ApiCaller';
+import { dotPulse } from 'ldrs';
 
 const socket = io.connect("https://pingpong-v2-server.onrender.com");
 
@@ -21,6 +22,8 @@ const App = () =>
     const storedRoomData = JSON.parse(localStorage.getItem('roomData'));
 
     const [joinSuccess, setJoinSuccess] = useState(false);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [accessToken, setAccessToken] = useState(null);
 
@@ -117,22 +120,35 @@ const App = () =>
 
     const scrollRef = useRef(null);
     useScrollSnap({ ref: scrollRef, duration: 10, delay: 0 });
+    dotPulse.Register();
 
     return (
         <section className="App">
             {
-                !joinSuccess ? (
-                    <Gateway
-                        roomData={roomData}
-                        setRoomData={setRoomData}
-                        setJoinSuccess={setJoinSuccess}
-                        socket={socket}
-                    />
+                isLoading ? (
+                    <div className='loader'>
+                        <l-dot-pulse
+                            size="40"
+                            stroke="3"
+                            speed="1"
+                            color="#55a7e5"
+                        ></l-dot-pulse>
+                    </div>
                 ) : (
-                    <main className='main-activity' ref={scrollRef}>
-                        <Chat socket={socket} userData={storedRoomData} handleLogout={handleLogout} />
-                        <Public socket={socket} userData={storedRoomData} />
-                    </main>
+                    !joinSuccess ? (
+                        <Gateway
+                            roomData={roomData}
+                            setRoomData={setRoomData}
+                            setJoinSuccess={setJoinSuccess}
+                            setIsLoading={setIsLoading}
+                            socket={socket}
+                        />
+                    ) : (
+                        <main className='main-activity' ref={scrollRef}>
+                            <Chat socket={socket} userData={storedRoomData} handleLogout={handleLogout} />
+                            <Public socket={socket} userData={storedRoomData} />
+                        </main>
+                    )
                 )
             }
             <ApiCaller />

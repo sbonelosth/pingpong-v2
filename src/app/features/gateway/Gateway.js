@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
+const Gateway = ({ roomData, setRoomData, setJoinSuccess, setIsLoading, socket }) =>
 {
     const [isJoin, setIsJoin] = useState(true);
     const loginBtnRef = useRef(null);
@@ -44,6 +44,8 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
     {
         e.preventDefault();
 
+        setIsLoading(true);
+
         const hasNullValues = Object.values(roomData).some(value => value === null || value === '');
 
         if (hasNullValues)
@@ -62,6 +64,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, socket }) =>
                 if (res.ok)
                 {
                     socket.emit("join-room", roomData);
+                    setIsLoading(false);
                     setJoinSuccess(true);
                     localStorage.setItem("roomData", JSON.stringify(roomData));
                     localStorage.setItem("refreshToken", data.refreshToken);

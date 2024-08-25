@@ -47,7 +47,7 @@ const Public = ({ socket, userData }) =>
     {
         return posts.reduce((groups, post) =>
         {
-            const date = moment(post.timestamp, 'LT').startOf('day').format('YYYY-MM-DD');
+            const date = post.date;
             if (!groups[date])
             {
                 groups[date] = [];
@@ -70,6 +70,8 @@ const Public = ({ socket, userData }) =>
                 sender: userData.username,
                 post: currentPost,
                 timestamp: moment().format("LT"),
+                date: moment().format("YYYY-MM-DD"),
+                index: Date.now(),
                 blob: imageObject.blob,
                 mimeType: imageObject.type,
             };
