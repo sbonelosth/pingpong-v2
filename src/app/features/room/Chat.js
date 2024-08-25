@@ -225,34 +225,36 @@ const Chat = ({ socket, userData, handleLogout }) =>
                     onClick={handleImageUndo}
                     className="attachment-preview">
                     {
-                    (imageObject.file !== null) &&
-                    <>
-                        <p>File Preview</p>
-                        <img
-                            src={`data:image/${imageObject.type};base64,${imageObject.blob}`}
-                            alt='Preview' />
-                    </>
-                }
+                        (imageObject.file !== null) &&
+                        <>
+                            <p>File Preview</p>
+                            <img
+                                src={`data:image/${imageObject.type};base64,${imageObject.blob}`}
+                                alt='Preview' />
+                        </>
+                    }
                 </div>
                 <div className="input-content">
-                    <label className="attach-file">
+                    <div className='input-group'>
+                        <label className="attach-file">
+                            <input
+                                type="file"
+                                id="image-upload"
+                                name="imageUpload"
+                                onChange={onImageChange}
+                                accept=".jpg, .jpeg, .png" />
+                            <FontAwesomeIcon icon={faImage} color='#d1c994' />
+                        </label>
                         <input
-                            type="file"
-                            id="image-upload"
-                            name="imageUpload"
-                            onChange={onImageChange}
-                            accept=".jpg, .jpeg, .png" />
-                        <FontAwesomeIcon icon={faImage} color='#d1c994' />
-                    </label>
-                    <input
-                        type="text"
-                        value={currentMsg}
-                        onChange={handleCurrentMsg}
-                        onKeyUp={handleTyping}
-                        onKeyDown={e => { e.key === "Enter" && sendMsg(e) }}
-                        id="chat-input-text"
-                        placeholder="Message"
-                        required />
+                            type="text"
+                            value={currentMsg}
+                            onChange={handleCurrentMsg}
+                            onKeyUp={handleTyping}
+                            onKeyDown={e => { e.key === "Enter" && sendMsg(e) }}
+                            id="chat-input-text"
+                            placeholder="Message"
+                            required />
+                    </div>
                     <button
                         className='post-button'
                         id='send-to-chat'

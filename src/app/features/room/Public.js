@@ -163,7 +163,7 @@ const Public = ({ socket, userData }) =>
                 <FontAwesomeIcon icon={showPublicChat ? faHouseLock : faBullhorn} size='2x' />
             </nav>
             <div className='create-post-container'>
-                <div className='post-input-group'>
+                <div className='input-group'>
                     <label className="attach-file">
                         <input
                             type="file"
