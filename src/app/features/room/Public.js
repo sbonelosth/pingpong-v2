@@ -203,9 +203,9 @@ const Public = ({ socket, userData }) =>
                     </>
                 }
             </div>
-            <div className='public-posts-container'>
+            <div className='public-posts-container' ref={postsContainerRef}>
                 {Object.keys(groupedPosts).map((date, index) => (
-                    <div className='grouped-by-date' ref={postsContainerRef} key={index}>
+                    <div className='grouped-by-date' key={index}>
                         {groupedPosts[date].map((postContent, index) =>
                         {
                             const showUserMeta = previousSender !== postContent.sender;
