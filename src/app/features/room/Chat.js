@@ -250,13 +250,13 @@ const Chat = ({ socket, userData, handleLogout }) =>
                         onChange={handleCurrentMsg}
                         onKeyUp={handleTyping}
                         onKeyDown={e => { e.key === "Enter" && sendMsg(e) }}
-                        id="input-text"
+                        id="chat-input-text"
                         placeholder="Message"
                         required />
                     <button
-                        className="btn"
-                        onClick={sendMsg}
-                        id="send-btn">
+                        className='post-button'
+                        id='send-to-chat'
+                        onClick={sendMsg}>
                         <FontAwesomeIcon icon={faPaperPlane} color='#000' />
                     </button>
                 </div>

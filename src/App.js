@@ -1,4 +1,6 @@
 import './App.css';
+import './Chat.css';
+import './Public.css';
 import "@fontsource/jetbrains-mono";
 import Chat from './app/features/room/Chat';
 import { useRef, useState, useEffect } from 'react';

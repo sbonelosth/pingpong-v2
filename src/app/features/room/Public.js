@@ -183,7 +183,8 @@ const Public = ({ socket, userData }) =>
                         placeholder='Join the discussion' />
                 </div>
                 <button
-                    className='btn'
+                    className='post-button'
+                    id='post-to-public'
                     style={{ backgroundColor: "#55a7e5" }}
                     onClick={sendPost}>
                     <FontAwesomeIcon icon={faPaperPlane} />

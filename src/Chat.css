@@ -1,0 +1,269 @@
+:root
+{
+    --bg-color: #030319;
+    --primary-accent: #55a7e5;
+    --secondary-accent: #d1c994;
+}
+
+/* flex */
+.action-bar,
+.join-alert-container,
+.room-container,
+.message-container,
+.message-content,
+.input-content
+{
+    display: flex;
+}
+
+.action-bar,
+.join-alert-container,
+.message-container,
+.input-content
+{
+    flex-direction: row;
+}
+
+.room-container,
+.message-content
+{
+    flex-direction: column;
+}
+
+.action-bar
+{
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 1rem;
+    border-bottom: 1px groove #1a223a;
+}
+
+.room-name
+{
+    font-size: small;
+    font-weight: bold;
+    color: var(--primary-accent);
+}
+
+.exit-room
+{
+    width: fit-content;
+    height: 2rem;
+    background-color: transparent;
+    outline: 0;
+    border: 0;
+}
+
+.main-activity
+{
+    width: 100%;
+    box-sizing: border-box;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.join-alert-container
+{
+    width: fit-content;
+    height: 2rem;
+    margin: 0 auto;
+    padding: 1rem;
+    align-items: center;
+    background-color: #55a7e566;
+    box-shadow: 0 0 1000px 0 #000000;
+    border-radius: 20px;
+}
+
+.join-alert-container>span
+{
+    font-size: small
+}
+
+.join-alert-container.hide-alert
+{
+    display: none;
+}
+
+.room-container
+{
+    width: 50%;
+    height: 100vh;
+    box-shadow: 0 0 10px 0 #00000022;
+}
+
+.chat-container
+{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    padding: 1rem;
+}
+
+.message-container
+{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.message-container.sender
+{
+    justify-content: flex-end;
+}
+
+.message-container.other
+{
+    justify-content: flex-start;
+}
+
+.other>.message-content>.text-message
+{
+    padding-right: 10rem;
+}
+
+.sender>.message-content>.text-message
+{
+    text-align: end;
+    padding-left: 10rem;
+}
+
+.other>.message-content
+{
+    align-items: start;
+}
+
+.sender>.message-content
+{
+    align-items: end;
+}
+
+.message-content>.text-message,
+.post-content>.text-post
+{
+    font-size: small;
+    margin: 0;
+    color: #f0f8ffcc;
+}
+
+.text-message.no-margin,
+.text-post.no-margin
+{
+    margin: 0;
+}
+
+.message-content>img,
+.post-content>img
+{
+    margin: 0.5rem 0;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all .2s ease-in-out;
+}
+
+.message-content>img:hover,
+.post-content>img:hover
+{
+    transform: scale(1.1);
+}
+
+.sender>.message-content>.user-meta
+{
+    justify-content: flex-end;
+}
+
+.input-container
+{
+    width: 100%;
+}
+
+.input-content
+{
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 1rem;
+    margin: 0 auto;
+    background-color: var(--bg-color);
+}
+
+input[type="file"]
+{
+    display: none;
+}
+
+.attach-file
+{
+    display: inline-block;
+    width: 2.5rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    font-size: xx-large;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.attachment-preview
+{
+    width: 100%;
+    border-radius: 10px;
+}
+
+.attachment-preview p
+{
+    color: #f0f8ffcc;
+    font-size: x-small;
+    font-style: italic;
+    margin: 0.5rem 0 0 1rem;
+}
+
+.attachment-preview img
+{
+    width: 100px;
+    border-radius: 10px;
+    margin: 0.5rem 0.5rem 0 1rem;
+}
+
+#chat-input-text
+{
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    font-size: medium;
+    outline: 0;
+    border: 0;
+    border-radius: 20px;
+    color: #f0f8ffcc;
+}
+
+@media screen and (max-width:900px)
+{
+    .main-activity
+    {
+        width: 100%;
+        height: 100vh;
+        flex-direction: column;
+        scroll-snap-type: y mandatory;
+        overflow-y: scroll;
+    }
+
+    .room-container
+    {
+        width: 100%;
+        scroll-snap-align: start;
+        overflow-x: hidden;
+    }
+
+    .other>.message-content>.text-message
+    {
+        padding-right: 5rem;
+    }
+
+    .sender>.message-content>.text-message
+    {
+        text-align: end;
+        padding-left: 5rem;
+    }
+}
