@@ -81,7 +81,7 @@
 {
     width: 100%;
     height: 100%;
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: end;
     overflow: auto;
     scroll-behavior: smooth;
@@ -190,7 +190,6 @@
         display: block;
     }
 
-    
     .post-content>.text-post
     {
         margin-right: 5rem;
