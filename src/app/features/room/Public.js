@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { handleImageChange } from '../../utils/imageUtils';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from './firebase';
 
 const Public = ({ socket, userData }) =>
@@ -57,7 +57,23 @@ const Public = ({ socket, userData }) =>
         }, {});
     };
 
-    const groupedPosts = groupPostsByDate(postList);
+    const sortPosts = (posts) =>
+    {
+        return posts.sort((a, b) =>
+        {
+            if (a.date === b.date)
+            {
+                if (a.timestamp === b.timestamp)
+                {
+                    return a.index - b.index;
+                }
+                return new Date(a.timestamp) - new Date(b.timestamp);
+            }
+            return new Date(a.date) - new Date(b.date);
+        });
+    };
+
+    const groupedPosts = groupPostsByDate(sortPosts(postList));
 
     const sendPost = async (e) =>
     {
@@ -147,7 +163,8 @@ const Public = ({ socket, userData }) =>
     {
         const fetchPosts = async () =>
         {
-            const querySnapshot = await getDocs(collection(db, 'posts'));
+            const q = query(collection(db, 'posts'), orderBy('date'), orderBy('timestamp'), orderBy('index'));
+            const querySnapshot = await getDocs(q);
             const posts = querySnapshot.docs.map(doc => doc.data());
             setPostList(posts);
         };
