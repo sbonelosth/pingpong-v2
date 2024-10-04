@@ -10,85 +10,88 @@
     cursor: pointer;
 }
 
-:root
-{
+:root {
     --bg-color: #030319;
     --primary-accent: #55a7e5;
     --secondary-accent: #d1c994;
+    --text-color: #f0f8ffcc;
+    --input-bg: #1a223a;
+    --input-border: #55a7e5;
+    --button-bg: #55a7e5;
+    --button-hover-bg: #1a223a;
+    --button-hover-color: #f0f8ffcc;
 }
 
-.gateway-container,
-.main-activity,
-.user-meta,
-.projected-image-container
-{
+.gateway-container {
     display: flex;
-}
-
-.user-meta
-{
-    flex-direction: row;
-}
-
-.gateway-container
-{
     flex-direction: column;
-}
-
-.App
-{
-    width: 100%;
-    height: 100vh;
-    background-color: var(--bg-color);
-    scroll-snap-type: y mandatory;
-    box-sizing: border-box;
-}
-
-.gateway-container
-{
-    width: fit-content;
     justify-content: space-around;
-    margin: 0 auto;
-    padding: 1rem 2rem;
-    border-radius: 20px;
-}
-
-.gateway-container>input
-{
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-}
-
-.gateway-container>button
-{
-    font-weight: bold;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    border: 0;
-    outline: 0;
-    cursor: pointer;
-}
-
-.gateway-container>button:hover
-{
-    background-color: #1a223a;
-    color: #f0f8ffcc;
-    box-shadow: 0 0 1px 0 var(--primary-accent);
-}
-
-.loader
-{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
     align-items: center;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 20px;
+    background-color: var(--bg-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.existing-room
-{
+.gateway-title {
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.gateway-container > input {
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    outline: none;
+}
+
+.gateway-container > input::placeholder {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.gateway-container > button {
+    font-weight: bold;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--button-bg);
+    color: var(--bg-color);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.gateway-container > button:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-color);
+    box-shadow: 0 0 5px var(--primary-accent);
+}
+
+.existing-room {
     font-size: small;
-    color: #f0f8ffcc;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.existing-room button {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.existing-room button:hover {
+    color: var(--secondary-accent);
 }
 
 .main-activity

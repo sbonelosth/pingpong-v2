@@ -50,5 +50,7 @@
   "description": "\"Coversation is like ping-pong.\" ~ Ellie Chu",
   "main": "index.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {},
+  "keywords": []
 }
