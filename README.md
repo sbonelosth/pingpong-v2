@@ -1,6 +1,6 @@
 # A simple ReactJS app for chatting that utilizes socket.io, MongoDB and Firebase
 
-# The features a auth system with stable session management using JWT
+# The app features a auth system with stable session management using JWT
 
 # The chats are divided into 2 parts: Private and Public
 
