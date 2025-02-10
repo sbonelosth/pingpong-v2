@@ -123,8 +123,7 @@ const Gateway = ({ roomData, setRoomData, setJoinSuccess, setIsLoading, socket }
                 {`${isJoin ? "Join" : "Create"} Room`}
             </button>
             <p className="existing-room">
-                To access an existing room:<br /><br />
-                <button onClick={handleOpenRoom}>Click Me</button>
+                <button onClick={handleOpenRoom}>Click here</button>{" to access an existing room"}
             </p>
         </section>
     );
